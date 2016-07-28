@@ -1,0 +1,185 @@
+# myname.turtle
+# KTurtle programming environment
+
+# Drawing greek name "ΔΕΣΠΟΙΝΑ"
+# with scalable characters.
+
+reset
+
+$startposx=10
+$startposy=200
+
+$ipsos=70
+$platos=40
+$spacing=$platos*0.2
+
+# set to "true" or "false" (without quotes)
+$proportional=true
+
+learn delta {
+  # calculates diagonal angle
+  $diaga=arctan ($platos/2/$ipsos)
+  # calculates diagonal distance
+  $diagd=sqrt ($ipsos^2+($platos/2)^2)
+  direction $diaga
+  forward $diagd
+  direction 180-$diaga
+  forward $diagd
+  direction 270
+  forward $platos
+}
+
+learn alpha {
+  $diaga=arctan ($platos/2/$ipsos)
+  $diagd=sqrt ($ipsos^2+($platos/2)^2)
+  direction $diaga
+  forward $diagd
+  direction 180-$diaga
+  forward $diagd
+  go getx-$platos/4*3,gety-$ipsos/2
+  direction 90
+  forward $platos/2
+}
+
+learn epsilon {
+  go getx+$platos,gety-$ipsos
+  direction 270
+  forward $platos
+  turnleft 90
+  forward $ipsos
+  turnleft 90
+  forward $platos
+  go getx-$platos,gety-$ipsos/2
+  forward $platos*0.8
+}
+
+learn sigma {
+  $diaga=arctan (($platos/2)/($ipsos/2))
+  $diagd=sqrt (($ipsos/2)^2+($platos/2)^2)
+  go getx+$platos,gety-$ipsos
+  direction 270
+  forward $platos
+  direction 180-$diaga
+  forward $diagd
+  direction 180+$diaga
+  forward $diagd
+  direction 90
+  forward $platos
+}
+
+learn p {
+  direction 0
+  forward $ipsos
+  turnright 90
+  forward $platos
+  turnright 90
+  forward $ipsos
+}
+
+learn omikron {
+  if $ipsos<=$platos {
+    $diagd=sqrt (($ipsos*0.2)^2*2)
+    $diagd2=$ipsos*0.2
+  } else {
+    $diagd=sqrt (($platos*0.2)^2*2)
+    $diagd2=$platos*0.2
+  }
+  direction 0
+  go getx,gety-$diagd2
+  forward $ipsos-$diagd2*2
+  turnright 45
+  forward $diagd
+  turnright 45
+  forward $platos-$diagd2*2
+  turnright 45
+  forward $diagd
+  turnright 45
+  forward $ipsos-$diagd2*2
+  turnright 45
+  forward $diagd
+  turnright 45
+  forward $platos-$diagd2*2
+  turnright 45
+  forward $diagd
+}
+
+learn iota {
+  direction 0
+  if $proportional {
+    forward $ipsos
+    # decrease excesive space from the next character
+    $startposx=$startposx-$platos
+  } else {
+    go getx+$platos/2,$startposy
+    forward $ipsos
+  }
+}
+
+learn ni {
+  $diaga=arctan ($platos/$ipsos)
+  $diagd=sqrt ($ipsos^2+$platos^2)
+  direction 0
+  forward $ipsos
+  direction 180-$diaga
+  forward $diagd
+  direction 0
+  forward $ipsos
+}
+
+learn charpos $pos {
+  go ($startposx+($platos+$spacing)*($pos-1)),$startposy
+}
+
+learn despoina $x, $y, $i, $p, $pr {
+# String manipulation is not supported by Kturtle. Length and substrings of a string variable can not be parsed.
+  $startposx=$x
+  $startposy=$y
+  $ipsos=$i
+  $platos=$p
+  $proportional=$pr
+  charpos 1
+  delta
+  charpos 2
+  epsilon
+  charpos 3
+  sigma
+  charpos 4
+  p
+  charpos 5
+  omikron
+  charpos 6
+  iota
+  charpos 7
+  ni
+  charpos 8
+  alpha
+}
+
+learn moveturtle {
+# Move turtle
+go 200,20
+direction 0
+}
+
+while true {
+# First screen
+for $i = 1 to 5 {
+# despoina $startposx, $startposy, $ipsos, $platos, $proportional
+  despoina 10, 400-$i*55, 50, 8*$i, false
+}
+moveturtle
+wait 1
+clear
+
+# Secopnd screen
+for $i = 1 to 5 {
+  despoina 10, 400-$i^2*10, 20*$i, 8, false
+}
+
+for $i = 1 to 5 {
+  despoina 180, 400-$i^2*10, 20*$i, 20, false
+}
+moveturtle
+wait 1
+clear
+}
